@@ -1,4 +1,4 @@
-# 🏥 Hospital Management System (Laravel 12)
+Hospital Management System (Laravel 12)
 
 A web-based Hospital Management System built with **Laravel 12**, **MySQL** and **Bootstrap 5** (dark theme).\
 It manages patients, doctors, departments, wards, appointments, admissions, medical records and system users,\
@@ -6,7 +6,7 @@ with three user roles: **Admin**, **Doctor** and **Receptionist**.
 
 ---
 
-## 📋 Table of Contents
+ Table of Contents
 
 1. [Features](#-features)
 
@@ -30,7 +30,7 @@ with three user roles: **Admin**, **Doctor** and **Receptionist**.
 
 ---
 
-## ✨ Features
+ Features
 
 | Module | What it does |
 | --- | --- |
@@ -50,7 +50,7 @@ Eloquent ORM only (no raw SQL), confirmation pop-ups before deleting.
 
 ---
 
-## 🧰 Requirements
+ Requirements
 
 | Software | Version | Notes |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ Eloquent ORM only (no raw SQL), confirmation pop-ups before deleting.
 
 ---
 
-## 🪟 Setup on Windows
+ Setup on Windows
 
 ### Step 1 – Install the tools
 
@@ -257,7 +257,7 @@ You should see 5 users (admin, doctors, receptionist) and 5 patients.
 
 ---
 
-## 🔐 Demo login accounts
+##  Demo login accounts
 
 All demo accounts use the password **`password123`**.
 
@@ -269,7 +269,7 @@ All demo accounts use the password **`password123`**.
 | Doctor | [peter.kamau@hospital.com](mailto:peter.kamau@hospital.com) |
 | Receptionist | [reception@hospital.com](mailto:reception@hospital.com) |
 
-> ⚠️ Change these passwords before using the system with real data.
+> Change these passwords before using the system with real data.
 
 ---
 
@@ -292,7 +292,7 @@ A user who opens a page their role cannot access sees a **403 – Access Denied*
 
 ---
 
-## 📁 Project structure
+##  Project structure
 
 ```
 hospital_management_system/
@@ -337,7 +337,7 @@ hospital_management_system/
 | `php artisan serve` | Start the app at [http://localhost:8000](http://localhost:8000) |
 | `php artisan serve --port=8080` | Use a different port |
 | `php artisan migrate --seed` | Create tables + demo data |
-| `php artisan migrate:fresh --seed` | ⚠️ Drop **all** tables and rebuild with fresh demo data |
+| `php artisan migrate:fresh --seed` |  Drop **all** tables and rebuild with fresh demo data |
 | `php artisan db:seed` | Re-run the seeder only (users are updated, sample data only added if no patients exist) |
 | `php artisan route:list` | Show all routes and their middleware |
 | `php artisan optimize:clear` | Clear cached config/routes/views |
@@ -345,7 +345,7 @@ hospital_management_system/
 
 ---
 
-## 🧯 Troubleshooting
+##  Troubleshooting
 
 | Problem | Fix |
 | --- | --- |
