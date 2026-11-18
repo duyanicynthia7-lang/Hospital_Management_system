@@ -1,0 +1,8 @@
+/*
+ * Vite entry stylesheet.
+ * The main theme lives in public/css/hms.css (loaded directly so the app works
+ * even without running `npm run build`). Add extra compiled styles here if needed.
+ */
+:root {
+    --hms-accent: #c0392b;
+}
