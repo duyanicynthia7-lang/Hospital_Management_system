@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Database\Factories\UserFactory;
@@ -13,10 +12,12 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    // Staff roles
     public const ROLE_ADMIN = 'admin';
     public const ROLE_DOCTOR = 'doctor';
     public const ROLE_RECEPTIONIST = 'receptionist';
 
+    // Human-readable role names
     public const ROLES = [
         self::ROLE_ADMIN => 'Administrator',
         self::ROLE_DOCTOR => 'Doctor',
@@ -49,6 +50,7 @@ class User extends Authenticatable
         return $this->hasOne(Doctor::class);
     }
 
+    // Role checking methods
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
@@ -79,8 +81,15 @@ class User extends Authenticatable
 
     public function getInitialsAttribute(): string
     {
-        $parts = preg_split('/\s+/', trim($this->name));
+        $parts = preg_split(
+            '/\s+/',
+            trim($this->name),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        ) ?: [];
+
         $initials = '';
+
         foreach (array_slice($parts, 0, 2) as $part) {
             $initials .= mb_strtoupper(mb_substr($part, 0, 1));
         }

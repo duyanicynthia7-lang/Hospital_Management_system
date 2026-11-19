@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -60,35 +61,106 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(UserRequest $request, User $user): RedirectResponse
-    {
-        $data = $request->validated();
+public function update(UserRequest $request, User $user): RedirectResponse
+{
+    $data = $request->validated();
 
-        // Prevent an admin from removing their own admin role (avoids locking everyone out)
-        if ($user->is($request->user()) && $data['role'] !== User::ROLE_ADMIN) {
-            return back()->withInput()->with('error', 'You cannot remove the admin role from your own account.');
-        }
-
-        if (empty($data['password'])) {
-            unset($data['password']);
-        } else {
-            $data['password'] = Hash::make($data['password']);
-        }
-
-        $user->update($data);
-
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    // Prevent an admin from demoting their own account.
+    if ($user->is($request->user()) && $data['role'] !== User::ROLE_ADMIN) {
+        return back()->withInput()->with(
+            'error',
+            'You cannot remove the admin role from your own account.'
+        );
     }
 
-    public function destroy(Request $request, User $user): RedirectResponse
-    {
-        if ($user->is($request->user())) {
-            return back()->with('error', 'You cannot delete your own account.');
+    if (empty($data['password'])) {
+        unset($data['password']);
+    } else {
+        $data['password'] = Hash::make($data['password']);
+    }
+
+    $result = DB::transaction(function () use ($user, $data) {
+        $adminIds = User::query()
+            ->where('role', User::ROLE_ADMIN)
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id');
+
+        $lockedUser = User::query()
+            ->lockForUpdate()
+            ->findOrFail($user->id);
+
+        if (
+            $lockedUser->isAdmin()
+            && $data['role'] !== User::ROLE_ADMIN
+            && $adminIds->count() <= 1
+        ) {
+            return 'last_admin';
         }
 
-        $name = $user->name;
-        $user->delete(); // linked doctor profile keeps existing (user_id set to NULL)
+        $lockedUser->update($data);
 
-        return redirect()->route('users.index')->with('success', "User {$name} deleted.");
+        return 'success';
+    });
+
+    if ($result === 'last_admin') {
+        return back()->withInput()->with(
+            'error',
+            'You cannot remove or demote the last administrator.'
+        );
     }
+
+    return redirect()->route('users.index')
+        ->with('success', 'User updated successfully.');
+}
+
+
+
+public function destroy(Request $request, User $user): RedirectResponse
+{
+    // Prevent users from deleting their own accounts.
+    if ($user->is($request->user())) {
+        return back()->with(
+            'error',
+            'You cannot delete your own account.'
+        );
+    }
+
+    $result = DB::transaction(function () use ($user) {
+
+        // Lock administrator records to protect the last admin.
+        $adminIds = User::query()
+            ->where('role', User::ROLE_ADMIN)
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id');
+
+        $lockedUser = User::query()
+            ->lockForUpdate()
+            ->findOrFail($user->id);
+
+        // Prevent deletion of the last administrator.
+        if (
+            $lockedUser->isAdmin()
+            && $adminIds->count() <= 1
+        ) {
+            return 'last_admin';
+        }
+
+        $lockedUser->delete();
+
+        return 'success';
+    });
+
+    if ($result === 'last_admin') {
+        return back()->with(
+            'error',
+            'You cannot delete the last administrator.'
+        );
+    }
+
+    return redirect()->route('users.index')
+        ->with('success', "User {$user->name} deleted.");
+}
+
 }
