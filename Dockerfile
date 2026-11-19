@@ -77,5 +77,4 @@ RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framewor
 
 # Render assigns the runtime port through PORT.
 EXPOSE 10000
-
-CMD ["sh", "-c", "sed -ri \"s/^Listen 80$/Listen ${PORT:-10000}/\" /etc/apache2/ports.conf && sed -ri \"s/<VirtualHost \\*:80>/<VirtualHost *:${PORT:-10000}>/\" /etc/apache2/sites-available/000-default.conf && exec apache2-foreground"]
+CMD ["sh", "-c", "php artisan migrate --force && sed -ri \"s/^Listen 80$/Listen ${PORT:-10000}/\" /etc/apache2/ports.conf && sed -ri \"s/<VirtualHost \\*:80>/<VirtualHost *:${PORT:-10000}>/\" /etc/apache2/sites-available/000-default.conf && exec apache2-foreground"]
