@@ -68,10 +68,10 @@ COPY . .
 # Copy built frontend assets.
 COPY --from=frontend /app/public/build ./public/build
 
-# Discover Laravel packages and configure permissions.
-RUN composer dump-autoload --no-dev --optimize \
+# Create Laravel directories before package discovery.
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+    && composer dump-autoload --no-dev --optimize --no-scripts \
     && php artisan package:discover --ansi \
-    && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwX storage bootstrap/cache
 
