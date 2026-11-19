@@ -67,14 +67,8 @@
                 <button type="submit" class="btn btn-hms w-100 py-2 fw-semibold">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
                 </button>
-            </form>
+                        </form>
 
-            <div class="mt-4 p-3 rounded small" style="background: rgba(255,255,255,.04); border: 1px dashed #2c3e5f;">
-                <div class="text-muted mb-1"><i class="bi bi-info-circle me-1"></i>Demo accounts (password: <code>password123</code>)</div>
-                <div>Admin: <code>admin@hospital.com</code></div>
-                <div>Doctor: <code>doctor@hospital.com</code></div>
-                <div>Receptionist: <code>reception@hospital.com</code></div>
-            </div>
         </div>
     </div>
 </div>
