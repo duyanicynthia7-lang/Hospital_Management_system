@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     // Configure application middleware
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // Trust Render's reverse proxy to detect HTTPS correctly
+        $middleware->trustProxies(at: '*');
+
         // Register custom role-based middleware
         // Usage: ->middleware('role:admin,doctor')
         $middleware->alias([
