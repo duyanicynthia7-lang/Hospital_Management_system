@@ -23,7 +23,7 @@ class ProductionAdminSeeder extends Seeder
             return;
         }
 
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => $email],
             [
                 'name' => 'Super Administrator',
