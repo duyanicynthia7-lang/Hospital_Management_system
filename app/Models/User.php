@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Database\Factories\UserFactory;
@@ -16,12 +17,14 @@ class User extends Authenticatable
     public const ROLE_ADMIN = 'admin';
     public const ROLE_DOCTOR = 'doctor';
     public const ROLE_RECEPTIONIST = 'receptionist';
+    public const ROLE_SUPER_ADMIN = 'superadmin';
 
     // Human-readable role names
     public const ROLES = [
         self::ROLE_ADMIN => 'Administrator',
         self::ROLE_DOCTOR => 'Doctor',
         self::ROLE_RECEPTIONIST => 'Receptionist',
+        self::ROLE_SUPER_ADMIN => 'Super Administrator',
     ];
 
     protected $fillable = [
@@ -66,6 +69,11 @@ class User extends Authenticatable
         return $this->role === self::ROLE_RECEPTIONIST;
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
+    }
+
     /**
      * Check whether the user has one of the given roles.
      */
@@ -81,12 +89,7 @@ class User extends Authenticatable
 
     public function getInitialsAttribute(): string
     {
-        $parts = preg_split(
-            '/\s+/',
-            trim($this->name),
-            -1,
-            PREG_SPLIT_NO_EMPTY
-        ) ?: [];
+        $parts = preg_split('/\s+/', trim($this->name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
         $initials = '';
 
