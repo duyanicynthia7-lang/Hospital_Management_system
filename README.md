@@ -178,7 +178,7 @@ php artisan serve
 ```
 
 Open **[http://localhost:8000](http://localhost:8000)** in your browser and log in with\
-**[admin@hospital.com](mailto:admin@hospital.com) / password123**.
+Log in with the admin account created by `php artisan db:seed` (set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD).
 
 Keep the PowerShell window open while using the app. Press `Ctrl + C` to stop the server.
 
@@ -259,7 +259,7 @@ You should see 5 users (admin, doctors, receptionist) and 5 patients.
 
 ##  Demo login accounts
 
-All demo accounts use the password **`password123`**.
+Demo accounts are created by `php artisan db:seed` on your local machine only. Their passwords are random.
 
 | Role | Email |
 | --- | --- |
