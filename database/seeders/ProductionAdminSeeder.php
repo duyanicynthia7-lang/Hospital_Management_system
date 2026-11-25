@@ -8,18 +8,13 @@ use Illuminate\Support\Facades\Hash;
 
 class ProductionAdminSeeder extends Seeder
 {
-    /**
-     * Creates one Super Administrator from environment variables.
-     * Safe to run on every start: firstOrCreate never overwrites an existing account.
-     */
     public function run(): void
     {
-        $email = strtolower(trim((string) env('SEED_ADMIN_EMAIL')));
+        $email = (string) env('SEED_ADMIN_EMAIL');
         $password = (string) env('SEED_ADMIN_PASSWORD');
 
         if ($email === '' || $password === '') {
             $this->command?->warn('SEED_ADMIN_EMAIL or SEED_ADMIN_PASSWORD not set. Skipping.');
-
             return;
         }
 
@@ -31,5 +26,7 @@ class ProductionAdminSeeder extends Seeder
                 'password' => Hash::make($password),
             ]
         );
+
+        $this->command?->info('Super admin account synced from environment.');
     }
 }
